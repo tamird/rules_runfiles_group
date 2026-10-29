@@ -12,11 +12,13 @@ load("//producer/providers:providers.bzl", "StarlarkInfo")
 _AFFINITY = "starlark"
 
 def _describe_starlark_library_runfiles(target, ctx):
+    # type: (Target, _DescriberContext) -> _Node[_DescriberContext]
     own_weight = ctx.rule.attr.runfiles_weight if ctx.rule.attr.runfiles_weight > 0 else None
     own_affinity = ctx.rule.attr.merge_affinity if ctx.rule.attr.merge_affinity else _AFFINITY
     kind = "third_party" if ctx.rule.attr.repository else "first_party"
 
     group = ctx.rule.attr.runfiles_group
+    own_files = target[DefaultInfo].files
     if group:
         # One *named* group for this library and everything it reaches: its own
         # sources and its deps' and data's groups all go into it.
@@ -24,11 +26,11 @@ def _describe_starlark_library_runfiles(target, ctx):
         return runfiles_groups.node(
             add = [runfiles_groups.entry(
                 name = group,
-                content = target[DefaultInfo].files,
+                content = own_files,
                 kind = kind,
                 weight = own_weight,
                 merge_affinity = own_affinity,
-            )] if ctx.rule.files.srcs else [],
+            )] if own_files else [],
             merge_from = [
                 runfiles_groups.merge_from("deps", into = group),
                 runfiles_groups.merge_from("data", fallback = "synthesize", into = group),
@@ -39,7 +41,7 @@ def _describe_starlark_library_runfiles(target, ctx):
         # What this library ADDS: its own sources, as a per-target group.
         add = [runfiles_groups.entry(
             name = ctx.label,
-            content = target[DefaultInfo].files,
+            content = own_files,
             kind = kind,
             weight = own_weight,
             merge_affinity = own_affinity,
@@ -57,9 +59,11 @@ def _describe_starlark_library_runfiles(target, ctx):
 starlark_library_runfiles_group_describer = runfiles_groups.make_describer_rule(describe = _describe_starlark_library_runfiles)
 
 def _canonical_repo_name(ctx):
+    # type: (ctx[object, object]) -> str
     return ctx.label.repo_name or "_main"
 
 def _starlark_library_impl(ctx):
+    # type: (...) -> list[DefaultInfo | _StarlarkInfo]
     direct_srcs = ctx.files.srcs
 
     transitive_sources = [dep[StarlarkInfo].sources for dep in ctx.attr.deps]

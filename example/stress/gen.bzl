@@ -24,6 +24,7 @@ load("//producer/rules:starlark_binary.bzl", "starlark_binary")
 load("//producer/rules:starlark_library.bzl", "starlark_library")
 
 def stress_closure(name, n, src = "stress.star"):
+    # type: (str, int, str | Label) -> None
     """Emits an n-deep library closure plus a binary and a package on top of it.
 
     Args:

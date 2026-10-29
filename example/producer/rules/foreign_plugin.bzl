@@ -6,6 +6,7 @@ group from the runfiles instead (see its runtime_plugins attribute).
 """
 
 def _foreign_plugin_impl(ctx):
+    # type: (...) -> list[DefaultInfo]
     runtime = ctx.actions.declare_file(ctx.label.name + ".plugin.json")
     ctx.actions.write(runtime, json.encode({"name": ctx.label.name}))
     report = ctx.actions.declare_file(ctx.label.name + ".build_report.txt")

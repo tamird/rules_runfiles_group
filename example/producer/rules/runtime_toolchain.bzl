@@ -3,6 +3,7 @@
 load("@rules_runfiles_group//runfiles_group:lib.bzl", "runfiles_groups")
 
 def _describe_runtime_toolchain_runfiles(target, _ctx):
+    # type: (Target, ctx[object, object]) -> _Node[ctx[object, object]]
     return runfiles_groups.node(add = [runfiles_groups.entry(
         name = "example#runtime",
         content = target[DefaultInfo].default_runfiles,
@@ -13,6 +14,7 @@ def _describe_runtime_toolchain_runfiles(target, _ctx):
 runtime_toolchain_runfiles_group_describer = runfiles_groups.make_describer_rule(describe = _describe_runtime_toolchain_runfiles)
 
 def _toolchain_impl(ctx):
+    # type: (...) -> list[DefaultInfo | ToolchainInfo]
     runfiles = ctx.runfiles(files = ctx.files.srcs)
     return [
         DefaultInfo(runfiles = runfiles),

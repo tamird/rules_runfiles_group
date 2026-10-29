@@ -12,21 +12,27 @@ distinct SymlinkEntry objects -- as any packager that re-creates runfiles does.
 load("@rules_runfiles_group//runfiles_group:lib.bzl", "runfiles_groups")
 
 def _symlink_runfiles(ctx, files):
+    # type: (ctx[object, object], Collection[File]) -> runfiles
     return ctx.runfiles(
         symlinks = {"links/" + f.basename: f for f in files},
         root_symlinks = {"root_links/" + f.basename: f for f in files},
     )
 
 def _describe_symlink_bundle_runfiles(target, ctx):
+    # type: (Target, ctx[object, object]) -> _Node[ctx[object, object]]
+    srcs = getattr(ctx.rule.files, "srcs", None)
+    if srcs == None:
+        fail("{}: symlink bundle describer requires a label-valued srcs attribute".format(target.label))
     return runfiles_groups.node(add = [runfiles_groups.entry(
         name = ctx.label,
-        content = _symlink_runfiles(ctx, ctx.rule.files.srcs),
+        content = _symlink_runfiles(ctx, srcs),
         kind = "first_party",
     )])
 
 symlink_bundle_runfiles_group_describer = runfiles_groups.make_describer_rule(describe = _describe_symlink_bundle_runfiles)
 
 def _symlink_bundle_impl(ctx):
+    # type: (...) -> list[DefaultInfo]
     return [DefaultInfo(runfiles = _symlink_runfiles(ctx, ctx.files.srcs))]
 
 symlink_bundle = rule(

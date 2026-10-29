@@ -1,0 +1,14 @@
+"""Starlark source and repository metadata."""
+
+# TODO(https://github.com/bazelbuild/bazel/issues/32207): Declare these field types on the provider.
+# TODO(https://github.com/bazelbuild/bazel/issues/32021): Annotate the element types of the file depsets.
+def StarlarkInfo(
+    *,
+    sources: depset[File],
+    loadpath: str,
+    repos: depset[tuple[str, str]],
+) -> record[{
+    "sources": depset[File],
+    "loadpath": str,
+    "repos": depset[tuple[str, str]],
+}]: ...

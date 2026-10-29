@@ -4,11 +4,13 @@ load("@rules_runfiles_group//runfiles_group:lib.bzl", "runfiles_groups")
 load(":starlark_runtime.bzl", "runtime_merge_from", "starlark_runtime")
 
 def _describe_starlark_toolchain_runfiles(_target, _ctx):
+    # type: (Target, ctx[object, object]) -> _Node[ctx[object, object]]
     return runfiles_groups.node(merge_from = runtime_merge_from("interpreter", "standard_library"))
 
 starlark_toolchain_runfiles_group_describer = runfiles_groups.make_describer_rule(describe = _describe_starlark_toolchain_runfiles)
 
 def _starlark_toolchain_impl(ctx):
+    # type: (...) -> list[ToolchainInfo]
     runtime = starlark_runtime(ctx, ctx.attr.interpreter, ctx.attr.standard_library)
     return [platform_common.ToolchainInfo(runtime = runtime)]
 

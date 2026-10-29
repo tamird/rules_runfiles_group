@@ -25,6 +25,7 @@ def _skip_interpreter_transform(resolved):
     )
 
 def _skip_interpreter_impl(_ctx):
+    # type: (...) -> list[_TransformInfo]
     return [
         RunfilesGroupTransformInfo(
             transform = _skip_interpreter_transform,

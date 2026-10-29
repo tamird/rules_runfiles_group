@@ -33,6 +33,7 @@ _GROUP_INTERPRETER = GROUP_PREFIX + "interpreter"
 _GROUP_STD = GROUP_PREFIX + "std"
 
 def runtime_merge_from(interpreter_attr, standard_library_attr):
+    # type: (str, str) -> list[_MergeFrom[ctx[object, object]]]
     """The merge_from() specs of the interpreter and standard library attributes.
 
     Args:

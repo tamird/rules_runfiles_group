@@ -12,6 +12,7 @@ the describer names the one it merges in from.
 load("@rules_runfiles_group//runfiles_group:lib.bzl", "runfiles_groups")
 
 def _describe_plain_binary_runfiles(target, ctx):
+    # type: (Target[FilesToRunProvider[File]], ctx[object, object]) -> _Node[ctx[object, object]]
     return runfiles_groups.node(
         add = [runfiles_groups.entry(
             name = ctx.label,
@@ -25,6 +26,7 @@ def _describe_plain_binary_runfiles(target, ctx):
 plain_binary_runfiles_group_describer = runfiles_groups.make_describer_rule(describe = _describe_plain_binary_runfiles)
 
 def _plain_binary_impl(ctx):
+    # type: (...) -> list[DefaultInfo]
     exe = ctx.actions.declare_file(ctx.label.name)
     ctx.actions.write(exe, "#!/bin/sh\n", is_executable = True)
     runfiles = ctx.runfiles(files = [exe] + ctx.files.data)

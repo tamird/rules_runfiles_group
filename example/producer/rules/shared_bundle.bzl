@@ -5,6 +5,7 @@ load("@rules_runfiles_group//runfiles_group:lib.bzl", "runfiles_groups")
 _AFFINITY = "shared_bundle"
 
 def _describe_shared_bundle_runfiles(target, ctx):
+    # type: (Target, _DescriberContext) -> _Node[_DescriberContext]
     # A leaf: it adds to one group and merges nothing in.
     return runfiles_groups.node(add = [runfiles_groups.entry(
         # A *named* group, so it needs a ruleset prefix: unlike a Label, a string
@@ -19,6 +20,7 @@ def _describe_shared_bundle_runfiles(target, ctx):
 shared_bundle_runfiles_group_describer = runfiles_groups.make_describer_rule(describe = _describe_shared_bundle_runfiles)
 
 def _shared_bundle_impl(ctx):
+    # type: (...) -> list[DefaultInfo]
     return [
         DefaultInfo(
             files = depset(ctx.files.srcs, order = "topological"),

@@ -13,6 +13,7 @@ load("@rules_runfiles_group//runfiles_group:lib.bzl", "runfiles_groups")
 _AFFINITY = "asset_bundle"
 
 def _describe_asset_bundle_runfiles(target, ctx):
+    # type: (Target, _DescriberContext) -> _Node[_DescriberContext]
     return runfiles_groups.node(add = [runfiles_groups.entry(
         name = ctx.label,
         content = target[DefaultInfo].default_runfiles,
@@ -25,6 +26,7 @@ def _describe_asset_bundle_runfiles(target, ctx):
 asset_bundle_runfiles_group_describer = runfiles_groups.make_describer_rule(describe = _describe_asset_bundle_runfiles)
 
 def _asset_bundle_impl(ctx):
+    # type: (...) -> list[DefaultInfo]
     runfiles = ctx.runfiles(files = ctx.files.srcs)
     return [
         DefaultInfo(

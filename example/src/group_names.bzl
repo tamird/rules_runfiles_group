@@ -7,6 +7,7 @@ expectations, so they are computed here from the labels themselves.
 """
 
 def repo(label):
+    # type: (Label) -> str
     """Canonical repository name of a label, or "_main" for the main repository."""
     return label.repo_name or "_main"
 

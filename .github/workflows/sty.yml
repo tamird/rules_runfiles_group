@@ -1,0 +1,54 @@
+name: Starlark types
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sty:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: List implementations in each Bazel workspace
+        id: implementations
+        run: |
+          git -c core.quotePath=false ls-files -- '*.bzl' ':(exclude)example/**' > "$RUNNER_TEMP/sty-root-files"
+          git -C example -c core.quotePath=false ls-files -- '*.bzl' > "$RUNNER_TEMP/sty-example-files"
+      - uses: tamird/sty@2ab74c830937d3ca85165ca0e9a02a42400ad9e5
+        with:
+          audit-loads: true
+          bazel-version: '9.3.0'
+          advisory-files-from: ${{ runner.temp }}/sty-root-files
+          files: |
+            runfiles_group/describe.bzl
+            runfiles_group/identity_packager.bzl
+            runfiles_group/providers.bzl
+            runfiles_group/runfiles_group_analysis_test.bzl
+            runfiles_group/private/lib/constants.bzl
+            runfiles_group/private/lib/content.bzl
+            runfiles_group/private/lib/entry.bzl
+      - name: Check example workspace
+        if: ${{ !cancelled() && steps.implementations.outcome == 'success' }}
+        uses: tamird/sty@2ab74c830937d3ca85165ca0e9a02a42400ad9e5
+        with:
+          artifact-name: sty-example
+          advisory-files-from: ${{ runner.temp }}/sty-example-files
+          audit-loads: true
+          bazel-version: '9.3.0'
+          working-directory: example
+          files: |
+            producer/repository_rules/local_starlark_repository.bzl
+            producer/rules/foreign_plugin.bzl
+            src/group_names.bzl
+            stress/gen.bzl

@@ -1,0 +1,26 @@
+"""A materialized group's metadata and packager-defined handle."""
+
+# TODO(https://github.com/bazelbuild/bazel/issues/32207): Declare these field types on the provider.
+# TODO(https://github.com/bazelbuild/bazel/issues/32021): Annotate the element type of the pieces depset.
+def RunfilesGroupPartialInfo[T](
+    *,
+    name: Label | str,
+    contributor: Label | None,
+    handle: T,
+    pieces: depset[tuple[Label, T]],
+    kind: str,
+    rank: int,
+    do_not_merge: bool,
+    weight: int | None,
+    merge_affinity: str,
+) -> record[{
+    "name": Label | str,
+    "contributor": Label | None,
+    "handle": T,
+    "pieces": depset[tuple[Label, T]],
+    "kind": str,
+    "rank": int,
+    "do_not_merge": bool,
+    "weight": int | None,
+    "merge_affinity": str,
+}]: ...

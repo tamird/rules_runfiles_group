@@ -2,7 +2,9 @@
 
 load("//runfiles_group/private/lib:constants.bzl", "DEPSET_TYPE")
 
+# TODO(https://github.com/bazelbuild/bazel/issues/32021): Annotate depsets of File in the implementation.
 def _check_content(where, content):
+    # type: (str, depset[File] | runfiles) -> None
     """Fails unless content is one of the two legal forms. Allocates nothing."""
     if type(content) == DEPSET_TYPE:
         return
@@ -13,6 +15,7 @@ def _check_content(where, content):
         ))
 
 def stored_content(where, content):
+    # type: (str, depset[File] | runfiles) -> depset[File] | runfiles
     """Validates content and returns the form an entry stores.
 
     Args:
@@ -36,6 +39,7 @@ def stored_content(where, content):
     return depset(transitive = [content])
 
 def content_files(content):
+    # type: (depset[File] | runfiles) -> depset[File]
     """Returns every File in a runfiles content value, as a depset.
 
     The read path for a packager that only needs paths -- a manifest, an output
@@ -58,6 +62,7 @@ def content_files(content):
     return content.files
 
 def content_runfiles(ctx, content):
+    # type: (ctx[object, object], depset[File] | runfiles) -> runfiles
     """Returns a runfiles content value as a runfiles object.
 
     Identity for a group that already carries one; for a files-only group it builds
@@ -76,6 +81,7 @@ def content_runfiles(ctx, content):
     return content
 
 def union_contents(ctx, contents):
+    # type: (ctx[object, object], list[depset[File] | runfiles]) -> depset[File] | runfiles
     """Unions several groups' contents into one content value.
 
     For a packager whose handles are runfiles contents -- the identity packager's

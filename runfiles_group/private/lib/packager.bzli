@@ -1,0 +1,40 @@
+"""A packager uses one handle type across materialization and merging."""
+
+load("//runfiles_group/private/providers:runfiles_group_info.bzl", "RunfilesGroupInfo")
+load("//runfiles_group/private/providers:runfiles_group_partial_info.bzl", "RunfilesGroupPartialInfo")
+
+# TODO(https://github.com/bazelbuild/bazel/issues/31770): Declare the packager field dictionary in the implementation.
+PACKAGER_INFO_FIELDS: dict[{
+    "owned": str,
+    "shared": str,
+    "fallback": str,
+    "executable_group": str,
+}]
+
+# TODO(https://github.com/bazelbuild/bazel/issues/32021): Annotate the partials carried by each depset.
+class PackagerInfo[T](Protocol):
+    @property
+    def owned(self) -> depset[RunfilesGroupPartialInfo[T]]: ...
+
+    @property
+    def shared(self) -> depset[RunfilesGroupPartialInfo[T]]: ...
+
+    @property
+    def fallback(self) -> RunfilesGroupPartialInfo[T] | None: ...
+
+    @property
+    def executable_group(self) -> Label | str | None: ...
+
+# TODO(https://github.com/bazelbuild/bazel/issues/32104): Declare the finite dedup modes in the implementation.
+type PackagerOps[T, C: ctx[object, object] = ctx[object, object]] = struct[{
+    "materialize": Callable[[C, RunfilesGroupInfo], T],
+    "merge": Callable[[C, Label | str, list[RunfilesGroupPartialInfo[T]]], T],
+    "dedup": Literal["eager", "root"],
+}]
+
+def packager_ops[T, C: ctx[object, object]](
+    *,
+    materialize: Callable[[C, RunfilesGroupInfo], T],
+    merge: Callable[[C, Label | str, list[RunfilesGroupPartialInfo[T]]], T],
+    dedup: Literal["eager", "root"] = ...,
+) -> PackagerOps[T, C]: ...

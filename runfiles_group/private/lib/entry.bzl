@@ -13,7 +13,9 @@ load("//runfiles_group/private/lib:content.bzl", "stored_content")
 load("//runfiles_group/private/lib:names.bzl", "check_name")
 load("//runfiles_group/private/providers:runfiles_group_info.bzl", "KINDS", "RunfilesGroupInfo")
 
+# TODO(https://github.com/bazelbuild/bazel/issues/32104): Annotate the accepted metadata field names in the implementation.
 def check_metadata(where, field, value):
+    # type: (str, Literal["name", "kind", "rank", "do_not_merge", "weight", "merge_affinity"], object) -> None
     """Fails unless value is legal for the metadata field (or for `name`).
 
     Args:
@@ -44,7 +46,9 @@ def check_metadata(where, field, value):
     else:
         fail("{}: unknown field '{}', expected one of {}".format(where, field, RELABEL_FIELDS))
 
+# TODO(https://github.com/bazelbuild/bazel/issues/32021): Annotate the element type of entry content in the implementation.
 def make_entry(*, name, content, kind = "", rank = RANK_EXECUTABLE, do_not_merge = False, weight = None, merge_affinity = ""):
+    # type: (Label | str, depset[File] | runfiles, str, int, bool, int | None, str) -> RunfilesGroupInfo
     """Creates one validated group entry.
 
     Args:
@@ -104,6 +108,7 @@ def make_entry(*, name, content, kind = "", rank = RANK_EXECUTABLE, do_not_merge
     )
 
 def check_entry(where, entry):
+    # type: (str, object) -> None
     for field in ENTRY_FIELDS:
         if not hasattr(entry, field):
             fail(("{}: expected a RunfilesGroupInfo built with runfiles_groups.entry(), " +

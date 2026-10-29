@@ -1,0 +1,59 @@
+"""A rule describes its own runfiles and the attributes it merges."""
+
+load("//runfiles_group/private/lib:partial.bzli", "MetadataOverrides", "Overrides")
+load("//runfiles_group/private/providers:runfiles_group_info.bzl", "RunfilesGroupInfo")
+load("//runfiles_group/private/providers:runfiles_group_partial_info.bzl", "RunfilesGroupPartialInfo")
+
+type Regroup = Callable[[RunfilesGroupPartialInfo[object], Label], Overrides | None]
+# TODO(https://github.com/bazelbuild/bazel/issues/32104): Declare the finite fallback modes in the implementation.
+type _FallbackMode = Literal["ignore", "synthesize"]
+type Fallback[C: ctx[object, object]] = _FallbackMode | Callable[[C, Target], RunfilesGroupInfo | None]
+type _MergeFromFields[A: str | None, L: Label | None, F: Fallback[Never]] = struct[{
+    "attr": A,
+    "toolchain": L,
+    "where": str,
+    "fallback": F,
+    "into": Label | str | None,
+    "regroup": Regroup | None,
+    "overrides": MetadataOverrides,
+    "relabels": bool,
+}]
+type _MergeFrom[F: Fallback[Never]] = (
+    _MergeFromFields[str, None, F] | _MergeFromFields[None, Label, _FallbackMode]
+)
+type MergeFrom[C: ctx[object, object]] = _MergeFrom[Fallback[C]]
+type Node[C: ctx[object, object]] = struct[{
+    "marker": Literal["runfiles_groups.node"],
+    "add": list[RunfilesGroupInfo] | tuple[RunfilesGroupInfo, ...],
+    "merge_from": list[MergeFrom[C]] | None,
+    "executable_group": Label | str | None,
+}]
+
+def make_merge_from[F: Fallback[Never] = Literal["ignore"]](
+    attr: str | None = ...,
+    *,
+    toolchain: Label | None = ...,
+    fallback: F = ...,
+    into: Label | str | None = ...,
+    regroup: Regroup | None = ...,
+    **overrides: Unpack[MetadataOverrides],
+) -> _MergeFrom[F | Literal["ignore"]]: ...
+
+def _merge_from_fields[A: str | None, L: Label | None, F: Fallback[Never]](
+    attr: A,
+    toolchain: L,
+    where: str,
+    fallback: F,
+    into: Label | str | None,
+    regroup: Regroup | None,
+    overrides: MetadataOverrides,
+) -> _MergeFromFields[A, L, F]: ...
+
+def make_node[C: ctx[object, object] = ctx[object, object]](
+    *,
+    add: list[RunfilesGroupInfo] | tuple[RunfilesGroupInfo, ...] = ...,
+    merge_from: Collection[str | MergeFrom[C]] | None = ...,
+    executable_group: Label | str | None = ...,
+) -> Node[C]: ...
+
+def make_describer_rule[C: ctx[object, object], D: Target](*, describe: Callable[[D, C], Node[C] | None]) -> rule: ...

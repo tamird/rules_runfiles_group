@@ -1,0 +1,8 @@
+"""The describer supplies a node for the visited rule's context."""
+
+load("//runfiles_group/private/lib:describe.bzli", "Node")
+
+# TODO(https://github.com/bazelbuild/bazel/issues/32207): Declare these field types on the provider.
+def RunfilesGroupDescriberInfo[C: ctx[object, object], D: Target = Target](
+    *, describe: Callable[[D, C], Node[C] | None],
+) -> record[{"describe": Callable[[D, C], Node[C] | None]}]: ...

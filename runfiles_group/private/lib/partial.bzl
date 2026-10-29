@@ -35,6 +35,7 @@ def relabel(partial, overrides):
     )
 
 def check_overrides(where, overrides):
+    # type: (str, Overrides | MetadataOverrides) -> None
     for field, value in overrides.items():
         if field not in RELABEL_FIELDS:
             fail("{}: unknown field '{}', expected one of {}".format(where, field, RELABEL_FIELDS))
@@ -59,6 +60,7 @@ def derive(partial, **overrides):
     return relabel(partial, overrides)
 
 def _combine_str(a, b):
+    # type: (str, str) -> str
     if not a:
         return b
     if not b:
@@ -66,6 +68,7 @@ def _combine_str(a, b):
     return min(a, b)
 
 def max_weight(a, b):
+    # type: (int | None, int | None) -> int | None
     """The larger of two weights, where None means "no weight".
 
     Args:

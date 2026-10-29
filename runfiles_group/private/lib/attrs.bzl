@@ -11,6 +11,7 @@ load(
 load("//runfiles_group/private/lib:entry.bzl", "make_entry")
 
 def attr_targets(where, attrs):
+    # type: (str, Collection[_Attribute]) -> list[Target]
     """Flattens an iterable of rule attribute values to the Targets inside them.
 
     Every Label-typed attribute kind hands ctx.attr a differently shaped value,
@@ -56,6 +57,7 @@ def attr_targets(where, attrs):
     return targets
 
 def _append_targets(where, targets, values):
+    # type: (str, list[Target], _Targets) -> None
     """Appends a list of Targets, rejecting anything else."""
     for value in values:
         if type(value) != TARGET_TYPE:
@@ -64,6 +66,7 @@ def _append_targets(where, targets, values):
         targets.append(value)
 
 def _append_dict_half(where, targets, value):
+    # type: (str, list[Target], Target | str | _Targets) -> None
     """Appends the Targets on one side of a dict-shaped attribute value.
 
     The string side of a keyed dict is skipped: it is the key of a
@@ -80,6 +83,7 @@ def _append_dict_half(where, targets, value):
               "attribute value, got {}.").format(where, kind))
 
 def synthesized_entry(ctx, target):
+    # type: (ctx[object, object], Target) -> RunfilesGroupInfo
     """Synthesizes the entry for a target that does not describe its runfiles groups.
 
     It is a per-target group named by the target's Label, holding the target's

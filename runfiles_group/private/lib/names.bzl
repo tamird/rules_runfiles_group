@@ -3,6 +3,7 @@
 load("//runfiles_group/private/lib:constants.bzl", "LABEL_TYPE", "STRING_TYPE")
 
 def name_str(value):
+    # type: (Label | str | _Named) -> str
     """Canonical string form of a group name, for display and artifact naming.
 
     Not injective by construction: nothing stops a producer from naming one group
@@ -31,6 +32,7 @@ def name_str(value):
     return name
 
 def check_name(where, name):
+    # type: (str, object) -> None
     """Fails unless name is a Label or a non-empty string.
 
     Args:
@@ -44,6 +46,7 @@ def check_name(where, name):
         fail("{}: name must be a Label or a non-empty string, got {}".format(where, repr(name)))
 
 def sort_key(name):
+    # type: (Label | str) -> SortKey
     """A comparison token for a group name that works across both forms.
 
     A tuple comparison stops at the first unequal element, so putting the form
@@ -56,10 +59,12 @@ def sort_key(name):
     return (1, name)
 
 def sorted_name_strs(names):
+    # type: (Collection[Label | str]) -> list[str]
     """Sorted string forms of a collection of group names, for diagnostics."""
     return sorted([name_str(name) for name in names])
 
 def described_name(name):
+    # type: (Label | str) -> str
     """A group name rendered with its form, so a Label and a string never look alike."""
     if type(name) == LABEL_TYPE:
         return "Label({})".format(repr(name_str(name)))

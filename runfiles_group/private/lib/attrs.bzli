@@ -1,0 +1,12 @@
+"""Targets carried by Bazel rule attributes."""
+
+load("//runfiles_group/private/providers:runfiles_group_info.bzl", "RunfilesGroupInfo")
+
+class _Items[K, V](Protocol):
+    def items(self) -> Collection[tuple[K, V]]: ...
+
+# Runtime dispatch requires concrete container kinds; their contents are only read.
+type _TargetList = Intersection[Top[list[Unknown]], Sequence[Target]]
+type _Targets = _TargetList | tuple[Target, ...]
+type _Dict[K, V] = Intersection[Top[dict[Unknown, Unknown]], _Items[K, V]]
+type _Attribute = Target | _Targets | _Dict[Target, str] | _Dict[str, Target] | _Dict[str, _Targets]

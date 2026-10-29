@@ -53,10 +53,13 @@ def packager_ops(*, materialize, merge, dedup = "eager"):
         dedup = dedup,
     )
 
+# TODO(https://github.com/bazelbuild/bazel/issues/32021): Annotate the element type of packager handles in the implementation.
 def _identity_materialize(_ctx, entry):
+    # type: (ctx[object, object], RunfilesGroupInfo) -> depset[File] | runfiles
     return entry.content
 
 def _identity_merge(ctx, _name, partials):
+    # type: (ctx[object, object], Label | str, list[RunfilesGroupPartialInfo[depset[File] | runfiles]]) -> depset[File] | runfiles
     return union_contents(ctx, [partial.handle for partial in partials])
 
 IDENTITY_OPS = packager_ops(
@@ -85,10 +88,12 @@ fallback = "synthesize"; runfiles_groups.finalize() uses it for such a root.
 }
 
 def _propagation_filter(propagation_ctx):
+    # type: (propagation_ctx) -> list[str]
     rule_attrs = propagation_ctx.rule.attr
     attrs = getattr(rule_attrs, "_runfiles_group_attrs", None)
     if attrs != None:
-        return attrs.value
+        # The rule owns this attribute's schema; Bazel checks the list and its elements.
+        return attrs.value  # ty: ignore[invalid-return-type]
     if not hasattr(rule_attrs, "_aspect_rule_hints"):
         # The rule cannot describe its runfiles groups, so the aspect stops here
         # and the target is synthesized from its DefaultInfo.
@@ -103,16 +108,19 @@ def _propagation_filter(propagation_ctx):
 ATTR_ASPECTS = _propagation_filter if bazel_features.rules.aspect_propagation_context else ["*"]
 
 def _toolchains_propagation_filter(propagation_ctx):
+    # type: (propagation_ctx) -> list[Label]
     hints = getattr(propagation_ctx.rule.attr, "_aspect_rule_hints", None)
     if hints == None:
         return []
-    return hints.value
+    # Bazel checks these labels when it consumes toolchains_aspects.
+    return hints.value  # ty: ignore[invalid-return-type]
 
 TOOLCHAINS_ASPECTS = (
     _toolchains_propagation_filter if bazel_features.rules.aspect_propagation_context else ["*"] if bazel_features.rules.supports_toolchains_aspects_star else []
 )
 
 def check_ctx(where, ctx):
+    # type: (str, object) -> None
     """Fails unless ctx is a rule or aspect context.
 
     Args:
@@ -128,5 +136,6 @@ def check_ctx(where, ctx):
         fail("{}: first argument must be the rule or aspect ctx, got {}".format(where, type(ctx)))
 
 def check_ops(where, ops):
+    # type: (str, object) -> None
     if type(ops) != STRUCT_TYPE or not hasattr(ops, "materialize") or not hasattr(ops, "merge"):
         fail("{}: ops must come from runfiles_groups.packager_ops(), got {}".format(where, type(ops)))

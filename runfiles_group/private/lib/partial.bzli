@@ -1,0 +1,51 @@
+"""Partial transformations preserve the packager's handle type."""
+
+load("//runfiles_group/private/providers:runfiles_group_info.bzl", "RunfilesGroupInfo")
+load("//runfiles_group/private/providers:runfiles_group_partial_info.bzl", "RunfilesGroupPartialInfo")
+
+type Metadata = RunfilesGroupInfo | RunfilesGroupPartialInfo[object]
+
+# TODO(https://github.com/bazelbuild/bazel/issues/31770): Annotate the optional override keys in the implementation.
+type MetadataOverrides = dict[{
+    "kind": NotRequired[str],
+    "rank": NotRequired[int],
+    "do_not_merge": NotRequired[bool],
+    "weight": NotRequired[int | None],
+    "merge_affinity": NotRequired[str],
+}]
+type Overrides = dict[{
+    "name": NotRequired[Label | str],
+    "kind": NotRequired[str],
+    "rank": NotRequired[int],
+    "do_not_merge": NotRequired[bool],
+    "weight": NotRequired[int | None],
+    "merge_affinity": NotRequired[str],
+}]
+
+def make_partial[T](
+    entry_or_partial: Metadata,
+    *,
+    contributor: Label,
+    handle: T,
+) -> RunfilesGroupPartialInfo[T]: ...
+
+def relabel[T](
+    partial: RunfilesGroupPartialInfo[T],
+    overrides: Overrides | MetadataOverrides,
+) -> RunfilesGroupPartialInfo[T]: ...
+
+def derive[T](
+    partial: RunfilesGroupPartialInfo[T],
+    **overrides: Unpack[Overrides],
+) -> RunfilesGroupPartialInfo[T]: ...
+
+def combine[T](
+    a: RunfilesGroupPartialInfo[T],
+    b: Metadata,
+    weight: int | None,
+) -> RunfilesGroupPartialInfo[T]: ...
+
+def check_partial[T](
+    where: str,
+    partial: RunfilesGroupPartialInfo[T],
+) -> None: ...

@@ -65,14 +65,26 @@ def make_merge_from(attr = None, *, toolchain = None, fallback = "ignore", into 
         if type(toolchain) != LABEL_TYPE:
             fail("runfiles_groups.merge_from: toolchain must be the Label of a toolchain type, got ", repr(toolchain))
         where = "runfiles_groups.merge_from(toolchain = {})".format(repr(toolchain))
-        if fallback not in _FALLBACKS:
-            fail("{}: fallback must be one of {}, got {}".format(where, _FALLBACKS, repr(fallback)))
-    else:
-        if type(attr) != STRING_TYPE or not attr:
-            fail("runfiles_groups.merge_from: attr must be a non-empty attribute name, got ", repr(attr))
-        where = "runfiles_groups.merge_from({})".format(repr(attr))
-        if type(fallback) != FUNCTION_TYPE and fallback not in _FALLBACKS:
-            fail("{}: fallback must be one of {} or a function, got {}".format(where, _FALLBACKS, repr(fallback)))
+        return _merge_from_fields(
+            None, toolchain, where, _toolchain_fallback(where, fallback), into, regroup, overrides,
+        )
+
+    if type(attr) != STRING_TYPE or not attr:
+        fail("runfiles_groups.merge_from: attr must be a non-empty attribute name, got ", repr(attr))
+    where = "runfiles_groups.merge_from({})".format(repr(attr))
+    if type(fallback) != FUNCTION_TYPE and fallback not in _FALLBACKS:
+        fail("{}: fallback must be one of {} or a function, got {}".format(where, _FALLBACKS, repr(fallback)))
+    return _merge_from_fields(attr, None, where, fallback, into, regroup, overrides)
+
+def _toolchain_fallback(where, fallback):
+    # type: (str, object) -> _FallbackMode
+    if fallback == "ignore":
+        return "ignore"
+    if fallback == "synthesize":
+        return "synthesize"
+    fail("{}: fallback must be one of {}, got {}".format(where, _FALLBACKS, repr(fallback)))
+
+def _merge_from_fields(attr, toolchain, where, fallback, into, regroup, overrides):
     if into != None:
         check_name(where + ": into", into)
         if regroup != None:

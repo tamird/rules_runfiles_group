@@ -44,31 +44,23 @@ def _cheapest_pair(buckets, by_name, sort_keys, default_weight):
     for _key, names in buckets.items():
         if len(names) < 2:
             continue
-        w1 = None
-        n1 = None
-        k1 = None
-        w2 = None
-        n2 = None
-        k2 = None
+        first = None
+        second = None
         for name in names:
             entry = by_name.get(name)
             if entry == None:
                 continue  # merged away in an earlier step
             weight = _effective_weight(entry, default_weight)
             key = sort_keys[name]
-            if n1 == None or weight < w1 or (weight == w1 and key < k1):
-                w2 = w1
-                n2 = n1
-                k2 = k1
-                w1 = weight
-                n1 = name
-                k1 = key
-            elif n2 == None or weight < w2 or (weight == w2 and key < k2):
-                w2 = weight
-                n2 = name
-                k2 = key
-        if n2 == None:
+            if first == None or weight < first[0] or (weight == first[0] and key < first[1]):
+                second = first
+                first = (weight, key, name)
+            elif second == None or weight < second[0] or (weight == second[0] and key < second[1]):
+                second = (weight, key, name)
+        if first == None or second == None:
             continue
+        w1, k1, n1 = first
+        w2, k2, n2 = second
         candidate = (w1 + w2, by_name[n1].rank, k1, k2)
         if best == None or candidate < best[0]:
             best = (candidate, n1, n2)

@@ -17,19 +17,17 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - id: checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - name: List implementations in each Bazel workspace
-        id: implementations
-        run: |
-          git -c core.quotePath=false ls-files -- '*.bzl' ':(exclude)example/**' > "$RUNNER_TEMP/sty-root-files"
-          git -C example -c core.quotePath=false ls-files -- '*.bzl' > "$RUNNER_TEMP/sty-example-files"
-      - uses: tamird/sty@2ab74c830937d3ca85165ca0e9a02a42400ad9e5
+      - uses: tamird/sty@d400a00807b3c7f7b2ac82bf1e1e6a16db0290e3
         with:
           audit-loads: true
           bazel-version: '9.3.0'
-          advisory-files-from: ${{ runner.temp }}/sty-root-files
+          advisory-pathspecs: |
+            *.bzl
+            :(exclude)example/**
           files: |
             runfiles_group/describe.bzl
             runfiles_group/identity_packager.bzl
@@ -39,11 +37,11 @@ jobs:
             runfiles_group/private/lib/content.bzl
             runfiles_group/private/lib/entry.bzl
       - name: Check example workspace
-        if: ${{ !cancelled() && steps.implementations.outcome == 'success' }}
-        uses: tamird/sty@2ab74c830937d3ca85165ca0e9a02a42400ad9e5
+        if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}
+        uses: tamird/sty@d400a00807b3c7f7b2ac82bf1e1e6a16db0290e3
         with:
           artifact-name: sty-example
-          advisory-files-from: ${{ runner.temp }}/sty-example-files
+          advisory-pathspecs: '*.bzl'
           audit-loads: true
           bazel-version: '9.3.0'
           working-directory: example

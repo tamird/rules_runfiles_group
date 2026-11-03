@@ -36,6 +36,7 @@ jobs:
             runfiles_group/private/lib/constants.bzl
             runfiles_group/private/lib/content.bzl
             runfiles_group/private/lib/entry.bzl
+            runfiles_group/private/providers/runfiles_group_info.bzl
       - name: Check example workspace
         if: ${{ !cancelled() && steps.checkout.outcome == 'success' }}
         uses: tamird/sty@d400a00807b3c7f7b2ac82bf1e1e6a16db0290e3
@@ -46,6 +47,7 @@ jobs:
           bazel-version: '9.3.0'
           working-directory: example
           files: |
+            producer/providers/providers.bzl
             producer/repository_rules/local_starlark_repository.bzl
             producer/rules/foreign_plugin.bzl
             src/group_names.bzl

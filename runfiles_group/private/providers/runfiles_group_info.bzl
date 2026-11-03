@@ -39,6 +39,8 @@ DEFAULT_METADATA = struct(
     merge_affinity = "",
 )
 
+# TODO(https://github.com/bazelbuild/bazel/issues/32207): Declare the field types on the provider.
+# TODO(https://github.com/bazelbuild/bazel/issues/32021): Annotate the element type of the file depset.
 RunfilesGroupInfo = provider(
     doc = "Runfiles a target adds to one group: a name, the contents, and ordering/merge metadata.",
     fields = {
@@ -48,16 +50,16 @@ group -- "the runfiles this one target contributes" -- and needs no prefix, beca
 a Label is globally unique. A string means a named group that several targets may
 contribute to; prefix those with something unique to your ruleset.
 runfiles_groups.name_str() renders either form as a string.
-""",
+""",  # type: Label | str
         "content": """\
 runfiles or depset of File: the contents of this group. A depset is the shorthand
 for a group that is only files, which uses less memory; a runfiles object is the
 general form that can represent empty files, runfiles symlinks, root symlinks, and files.
-""",
-        "kind": "str: one of KINDS. A stable selector for packagers. \"\" means unspecified.",
-        "rank": "int: partial ordering key. Lower rank = earlier = more cacheable. Default 0.",
-        "do_not_merge": "bool: if True, packagers must not merge this group. Default False.",
-        "weight": "int >= 0 or None: merge priority hint. Lighter groups merge first.",
-        "merge_affinity": "str: merge grouping hint. \"\" means no affinity.",
+""",  # type: depset[File] | runfiles
+        "kind": "str: one of KINDS. A stable selector for packagers. \"\" means unspecified.",  # type: str
+        "rank": "int: partial ordering key. Lower rank = earlier = more cacheable. Default 0.",  # type: int
+        "do_not_merge": "bool: if True, packagers must not merge this group. Default False.",  # type: bool
+        "weight": "int >= 0 or None: merge priority hint. Lighter groups merge first.",  # type: int | None
+        "merge_affinity": "str: merge grouping hint. \"\" means no affinity.",  # type: str
     },
 )

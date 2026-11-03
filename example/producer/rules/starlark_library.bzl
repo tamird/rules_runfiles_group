@@ -63,7 +63,7 @@ def _canonical_repo_name(ctx):
     return ctx.label.repo_name or "_main"
 
 def _starlark_library_impl(ctx):
-    # type: (...) -> list[DefaultInfo | _StarlarkInfo]
+    # type: (...) -> list[DefaultInfo | StarlarkInfo]
     direct_srcs = ctx.files.srcs
 
     transitive_sources = [dep[StarlarkInfo].sources for dep in ctx.attr.deps]

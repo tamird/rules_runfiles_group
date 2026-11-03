@@ -1,4 +1,3 @@
-# TODO(https://github.com/bazelbuild/bazel/issues/32020): Use a source annotation when Bazel exposes the repository context type.
 def _local_starlark_repository_impl(rctx):
     # type: (...) -> None
     repo_root = rctx.path(rctx.attr.repo_file).dirname
@@ -75,6 +74,7 @@ def _local_starlark_repository_impl(rctx):
 
     rctx.file("REPO.bazel", "")
 
+# TODO(https://github.com/bazelbuild/bazel/issues/32020): Use a source annotation when Bazel exposes the repository context type.
 def _write_build_file(rctx, path, target_name, srcs, repository, weight, deps, main_module, runfiles_group):
     # type: (repository_ctx, str, str, list[str], str, int, list[str], str, str) -> None
     lines = []

@@ -1,5 +1,8 @@
 """Resolve overlapping groups without changing their handle type."""
 
+# TODO: Move the resolver signatures into source when their comments can
+# bind the same handle type in a partial, its coverage keys and its result.
+
 load("//runfiles_group/private/lib:packager.bzli", "PackagerOps")
 load("//runfiles_group/private/lib:partial.bzli", "Metadata")
 load("//runfiles_group/private/providers:runfiles_group_partial_info.bzl", "RunfilesGroupPartialInfo")

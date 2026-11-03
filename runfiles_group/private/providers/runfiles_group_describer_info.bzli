@@ -1,5 +1,8 @@
 """The describer supplies a node for the visited rule's context."""
 
+# TODO: Move describe's type onto its provider field when a comment can bind
+# its callback's target type and share its context type with the returned Node.
+
 load("//runfiles_group/private/lib:describe.bzli", "Node")
 
 # TODO(https://github.com/bazelbuild/bazel/issues/32207): Declare these field types on the provider.

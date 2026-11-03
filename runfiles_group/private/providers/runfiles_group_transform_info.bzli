@@ -1,5 +1,8 @@
 """A transform preserves every packager's handle type."""
 
+# TODO: Move transform's type onto its provider field when a source comment
+# can declare a callback generic over each invocation's name and handle types.
+
 load("//runfiles_group/private/lib:resolved.bzli", "ResolvedGroups")
 
 class _Transform(Protocol):

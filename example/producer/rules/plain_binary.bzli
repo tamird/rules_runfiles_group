@@ -1,3 +1,6 @@
 """The example plain binary rule."""
 
+# TODO: Import Node beside the callback's signature when source comments can
+# load types from types.bzli.
+
 load("@rules_runfiles_group//runfiles_group:types.bzli", _Node = "Node")

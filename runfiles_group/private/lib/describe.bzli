@@ -1,5 +1,8 @@
 """A rule describes its own runfiles and the attributes it merges."""
 
+# TODO: Move the describer signatures into source when comments can bind
+# the fallback and context types and export Node and MergeFrom.
+
 load("//runfiles_group/private/lib:partial.bzli", "MetadataOverrides", "Overrides")
 load("//runfiles_group/private/providers:runfiles_group_info.bzl", "RunfilesGroupInfo")
 load("//runfiles_group/private/providers:runfiles_group_partial_info.bzl", "RunfilesGroupPartialInfo")

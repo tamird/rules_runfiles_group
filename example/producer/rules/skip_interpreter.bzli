@@ -1,5 +1,8 @@
 """The interpreter transform preserves the packager's handle type."""
 
+# TODO: Move the transform's signature into source when a comment can bind
+# its name and handle type parameters and import ResolvedGroups.
+
 load("@rules_runfiles_group//runfiles_group:providers.bzl", _TransformInfo = "RunfilesGroupTransformInfo")
 load("@rules_runfiles_group//runfiles_group:types.bzli", _ResolvedGroups = "ResolvedGroups")
 

@@ -1,5 +1,8 @@
 """Resolved groups retain the packager handle type."""
 
+# TODO: Move ResolvedGroups into source when comments can export an alias
+# parameterized by group name and handle for transforms to reuse.
+
 load("//runfiles_group/private/providers:runfiles_group_partial_info.bzl", "RunfilesGroupPartialInfo")
 
 type _Name = Label | str

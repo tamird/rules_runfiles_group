@@ -1,5 +1,8 @@
 """Types for the public runfiles group library."""
 
+# TODO: Export these aliases from a .bzl module when source comments can
+# re-export generic types for other modules; comment aliases are file-local.
+
 load("//runfiles_group/private/lib:describe.bzli", _MergeFrom = "MergeFrom", _Node = "Node")
 load("//runfiles_group/private/lib:resolved.bzli", _ResolvedGroups = "ResolvedGroups")
 

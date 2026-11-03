@@ -1,5 +1,8 @@
 """Group limits preserve the packager's handle type."""
 
+# TODO: Move limit's signature into source when comments can bind the name
+# and handle types shared by its input and FinalizedGroups.
+
 load("//runfiles_group/private/lib:names.bzli", _SortKey = "SortKey")
 load("//runfiles_group/private/lib:packager.bzli", "PackagerOps")
 load("//runfiles_group/private/providers:runfiles_group_partial_info.bzl", "RunfilesGroupPartialInfo")

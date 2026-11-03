@@ -1,6 +1,7 @@
 """The describer supplies a node for the visited rule's context."""
 
-# TODO: Move describe's type onto its provider field when a comment can bind
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#protocols):
+# Move describe's type onto its provider field when a comment can bind
 # its callback's target type and share its context type with the returned Node.
 
 load("//runfiles_group/private/lib:describe.bzli", "Node")

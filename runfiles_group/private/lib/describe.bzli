@@ -1,6 +1,7 @@
 """A rule describes its own runfiles and the attributes it merges."""
 
-# TODO: Move the describer signatures into source when comments can bind
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#L60-L73):
+# Move the describer signatures into source when comments can bind
 # the fallback and context types and export Node and MergeFrom.
 
 load("//runfiles_group/private/lib:partial.bzli", "MetadataOverrides", "Overrides")

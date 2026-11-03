@@ -1,6 +1,7 @@
 """A transform preserves every packager's handle type."""
 
-# TODO: Move transform's type onto its provider field when a source comment
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#protocols):
+# Move transform's type onto its provider field when a source comment
 # can declare a callback generic over each invocation's name and handle types.
 
 load("//runfiles_group/private/lib:resolved.bzli", "ResolvedGroups")

@@ -1,6 +1,7 @@
 """A materialized group's metadata and packager-defined handle."""
 
-# TODO: Move the field types into the provider when its comments can bind
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#L565-L580):
+# Move the field types into the provider when its comments can bind
 # one handle type for both handle and pieces.
 
 # TODO(https://github.com/bazelbuild/bazel/issues/32207): Declare these field types on the provider.

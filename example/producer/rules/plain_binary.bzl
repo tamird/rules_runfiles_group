@@ -11,6 +11,8 @@ the describer names the one it merges in from.
 
 load("@rules_runfiles_group//runfiles_group:lib.bzl", "runfiles_groups")
 
+# TODO(https://bazel.build/rules/lib/providers/FilesToRunProvider#executable):
+# Use Target when its annotation can require a non-None executable.
 def _describe_plain_binary_runfiles(target, ctx):
     # type: (Target[FilesToRunProvider[File]], ctx[object, object]) -> _Node[ctx[object, object]]
     return runfiles_groups.node(

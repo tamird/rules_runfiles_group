@@ -1,6 +1,7 @@
 """Group names and values carrying one."""
 
-# TODO: Move the lookup signatures into source when comments can bind the
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#L141-L142):
+# Move the lookup signatures into source when comments can bind the
 # name and handle types in the resolved group index and its result.
 
 load("//runfiles_group/private/providers:runfiles_group_partial_info.bzl", "RunfilesGroupPartialInfo")

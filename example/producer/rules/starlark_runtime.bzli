@@ -1,10 +1,13 @@
 """The runtime inputs and their runfiles groups."""
 
-# TODO: Import MergeFrom beside runtime_merge_from's signature when source
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#L60-L73):
+# Import MergeFrom beside runtime_merge_from's signature when source
 # comments can load types from types.bzli.
 
 load("@rules_runfiles_group//runfiles_group:types.bzli", _MergeFrom = "MergeFrom")
 
+# TODO(https://bazel.build/rules/lib/providers/FilesToRunProvider#executable):
+# Use Target when its annotation can require a non-None executable.
 def starlark_runtime(
     ctx: ctx[object, object],
     interpreter: Target[FilesToRunProvider[File]],

@@ -1,6 +1,7 @@
 """Fold and finalize the root target's runfiles groups."""
 
-# TODO: Move finalize's signature into source when a comment can bind the
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#L141-L142):
+# Move finalize's signature into source when a comment can bind the
 # same handle type across PackagerInfo, PackagerOps and FinalizedGroups.
 
 load("//runfiles_group/private/lib:limit.bzli", _FinalizedGroups = "FinalizedGroups", _MergedGroupName = "MergedGroupName")

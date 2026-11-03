@@ -1,6 +1,7 @@
 """A packager uses one handle type across materialization and merging."""
 
-# TODO: Move the packager types into source when comments can export a
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#protocols):
+# Move the packager types into source when comments can export a
 # generic protocol and bind materialize's result to merge's input.
 
 load("//runfiles_group/private/providers:runfiles_group_info.bzl", "RunfilesGroupInfo")

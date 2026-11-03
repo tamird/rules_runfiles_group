@@ -1,6 +1,7 @@
 """Partial transformations preserve the packager's handle type."""
 
-# TODO: Move the partial constructors into source when their comments can
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#L141-L142):
+# Move the partial constructors into source when their comments can
 # bind the handle type shared by each constructor's input and result.
 
 load("//runfiles_group/private/providers:runfiles_group_info.bzl", "RunfilesGroupInfo")

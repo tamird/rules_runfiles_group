@@ -1,3 +1,6 @@
+# TODO(https://github.com/bazelbuild/bazel/pull/30373): Use native annotations
+# for ordinary signatures once Bazel 8.8 is the minimum. Spell an unconstrained
+# rule context Ctx in those annotations.
 [[stub-packages]]
 manifest = "stubs.toml"
 

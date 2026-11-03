@@ -6,6 +6,8 @@ _RUNTIME = Label("//producer/toolchains:runtime_toolchain_type")
 _TOOL = Label("//producer/toolchains:tool_toolchain_type")
 _MISSING = Label("//producer/toolchains:missing_toolchain_type")
 
+# TODO(https://bazel.build/rules/lib/providers/FilesToRunProvider#executable):
+# Use Target when its annotation can require a non-None executable.
 def _describe_toolchain_binary_runfiles(target, ctx):
     # type: (Target[FilesToRunProvider[File]], ctx[object, object]) -> _Node[ctx[object, object]]
     return runfiles_groups.node(

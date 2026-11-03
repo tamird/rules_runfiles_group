@@ -1,6 +1,7 @@
 """Group limits preserve the packager's handle type."""
 
-# TODO: Move limit's signature into source when comments can bind the name
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#L141-L142):
+# Move limit's signature into source when comments can bind the name
 # and handle types shared by its input and FinalizedGroups.
 
 load("//runfiles_group/private/lib:names.bzli", _SortKey = "SortKey")

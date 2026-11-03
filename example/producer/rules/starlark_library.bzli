@@ -1,6 +1,7 @@
 """Starlark library implementation contracts."""
 
-# TODO: Move the library describer types into source when comments can
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#L60-L73):
+# Move the library describer types into source when comments can
 # import Node alongside the local attribute schema.
 
 load("@rules_runfiles_group//runfiles_group:types.bzli", _Node = "Node")
@@ -11,4 +12,6 @@ type _SubjectAttrs = struct[{
     "runfiles_group": str,
     "runfiles_weight": int,
 }, ...]
+# TODO(https://github.com/bazelbuild/bazel/issues/32370): Use Ctx when a helper
+# can declare which fields it reads through the aspect's ctx.rule.attr.
 type _DescriberContext = ctx[object, object, _SubjectAttrs]

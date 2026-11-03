@@ -1,6 +1,7 @@
 """Targets carried by Bazel rule attributes."""
 
-# TODO: Move the attribute types into source when comments can declare a
+# TODO(https://github.com/tamird/sty/blob/sty-action-v0.2.0/docs/type-interfaces.md#protocols):
+# Move the attribute types into source when comments can declare a
 # generic items() method with known key and value types.
 
 load("//runfiles_group/private/providers:runfiles_group_info.bzl", "RunfilesGroupInfo")

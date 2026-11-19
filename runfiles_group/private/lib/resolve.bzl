@@ -81,7 +81,7 @@ def disjoint_inputs(parts):
 
 def _inputs_weight(inputs):
     """Max within one raw contributor (its pieces overlap), summed across inputs."""
-    per_contributor = {}
+    per_contributor = {}  # type: dict[Label | None, int]
     merged = None
     for part in inputs:
         if part.weight == None:

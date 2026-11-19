@@ -93,7 +93,7 @@ def _propagation_filter(propagation_ctx):
     attrs = getattr(rule_attrs, "_runfiles_group_attrs", None)
     if attrs != None:
         # The rule owns this attribute's schema; Bazel checks the list and its elements.
-        return attrs.value  # ty: ignore[invalid-return-type]
+        return attrs.value  # ty: ignore[invalid-explicit-return]
     if not hasattr(rule_attrs, "_aspect_rule_hints"):
         # The rule cannot describe its runfiles groups, so the aspect stops here
         # and the target is synthesized from its DefaultInfo.
@@ -113,7 +113,7 @@ def _toolchains_propagation_filter(propagation_ctx):
     if hints == None:
         return []
     # Bazel checks these labels when it consumes toolchains_aspects.
-    return hints.value  # ty: ignore[invalid-return-type]
+    return hints.value  # ty: ignore[invalid-explicit-return]
 
 TOOLCHAINS_ASPECTS = (
     _toolchains_propagation_filter if bazel_features.rules.aspect_propagation_context else ["*"] if bazel_features.rules.supports_toolchains_aspects_star else []
